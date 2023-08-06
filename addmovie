@@ -1,0 +1,95 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.IO;
+using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
+using System.Linq.Expressions;
+
+namespace Project
+{
+    public partial class Addmovie : System.Web.UI.Page
+    {
+        SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=D:\    \\db1.mdf;Integrated Security=True;Connect Timeout=30");
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            
+            if (!IsPostBack)
+            {
+                clearfn();
+            }
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            if (FileUpload1.HasFiles)
+            {
+                try
+                {
+                    string extension = Path.GetExtension(FileUpload1.FileName);
+                    if(extension==".jpg"|| extension==".jpeg" ||extension==".png")
+                        {
+                        string fname = Path.GetFileName(FileUpload1.FileName);
+                        FileUpload1.SaveAs(Server.MapPath("Images/") + fname);
+                       
+                        con.Open();
+                        SqlCommand cmd = new SqlCommand("insert into sam values('" + TextBox1.Text + "','" + FileUpload1.FileName + "')", con);
+                        int t = cmd.ExecuteNonQuery();
+                        if (t > 0)
+                        {
+                            Response.Write("<script>alert('file uploades')</script>");
+                            clearfn();
+                        }
+                        con.Close();
+                    }
+                    else
+                    {
+                        lmsg.Text = "only jpg,jpeg,png fiiles sare accepted";
+                        lmsg.ForeColor=System.Drawing.Color.Red;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    lmsg.Text = "un uploaded" + ex.Message;
+                }
+            }
+
+        }
+        public void clearfn()
+        {
+            TextBox1.Text = "";
+            lmsg.Text = "";
+        }
+        
+        }
+    }
+
+
+-------------------------------------------------------------------------------------------------------------------
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+             <asp:Label ID="Label1" runat="server" Text="name"></asp:Label>
+             <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox>
+                  <br>
+            <asp:FileUpload ID="FileUpload1" runat="server" />        
+            <br>
+            <asp:Button ID="Button1" runat="server" Text="Submit" OnClick="Button1_Click" />
+            <asp:Label ID="lmsg" runat="server" Text=""></asp:Label>
+         </div>
+    </form>     
+</body>
+</html>
