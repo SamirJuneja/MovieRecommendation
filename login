@@ -26,3 +26,27 @@ protected void btnlog_Click(object sender, EventArgs e)
 
             }
         }
+-----------------------------------------------------------------------------------------------------------------------------
+another page Logout button
+
+ protected void Page_Load(object sender, EventArgs e)
+        {
+            if (Session["username"]!=null)
+            {
+                Label1.Text = Session["username"].ToString();
+
+            }
+            else
+            {
+                Response.Redirect("Registration.aspx");
+            }
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            //Session.Clear();
+            //Session.Remove("username");
+            //Session.Abandon();
+            Session.RemoveAll();
+            Response.Redirect("Registration.aspx");
+        }
