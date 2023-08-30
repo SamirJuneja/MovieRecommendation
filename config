@@ -1,0 +1,5 @@
+<connectionStrings>
+		<add name="con" connectionString="Data Source=DESKTOP-T6DRP62\SQLEXPRESS;Initial Catalog=movie;Integrated Security=True" />
+	</connectionStrings>
+<-------- after page load {} ------>
+SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ToString());
